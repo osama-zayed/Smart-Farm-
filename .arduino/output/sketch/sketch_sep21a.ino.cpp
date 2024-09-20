@@ -2,14 +2,13 @@
 #line 1 "H:\\sketch_sep18a\\New folder\\sketch_sep21a\\sketch_sep21a.ino"
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <ArduinoJson.h> // إضافة المكتبة هنا
 
 const char* ssid = "osama zayed"; // استبدل بـ SSID الخاص بك
 const char* password = "osama775561"; // استبدل بكلمة المرور الخاصة بك
 
-const String apiKey = "2YM7M7O0JBS4DY9E"; // استبدل بمفتاح API الخاص بك
+const String apiKey = "2YM7M7O0JBS4DY9E"; // مفتاح API الخاص بالقراءة
 const String channelID = "2662884"; // قناة ThingSpeak
-const String ledState = "1"; // 1 لتشغيل LED، 0 لإيقاف تشغيله
-
 const int ledPin = 23; // رقم GPIO المتصل بالـ LED
 
 void setup() {
@@ -27,14 +26,12 @@ void setup() {
 }
 
 void loop() {
-  // تشغيل الـ LED
-  digitalWrite(ledPin, HIGH);
-  
-  // إرسال البيانات إلى ThingSpeak
+  // التحقق من الاتصال بالشبكة
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
     
-    String url = "http://api.thingspeak.com/update?api_key=" + apiKey + "&field1=" + ledState;
+    // إعداد عنوان URL لقراءة البيانات من ThingSpeak
+    String url = "http://api.thingspeak.com/channels/" + channelID + "/fields/1.json?api_key=" + apiKey + "&results=1";
     
     http.begin(url); // إعداد عنوان URL
     int httpResponseCode = http.GET(); // إجراء الطلب GET
@@ -43,6 +40,21 @@ void loop() {
       String response = http.getString(); // الحصول على الاستجابة
       Serial.println(httpResponseCode); // طباعة رمز الاستجابة
       Serial.println(response); // طباعة الاستجابة
+      
+      // تحليل JSON لاستخراج قيمة الحقل
+      DynamicJsonDocument doc(1024);
+      deserializeJson(doc, response);
+      int ledState = doc["feeds"][0]["field1"]; // الحصول على قيمة الحقل
+
+      // تشغيل أو إيقاف تشغيل LED بناءً على القيمة
+      if (ledState == 1) {
+        digitalWrite(ledPin, HIGH); // تشغيل LED
+        Serial.println("LED is ON");
+      } else {
+        digitalWrite(ledPin, LOW); // إيقاف تشغيل LED
+        Serial.println("LED is OFF");
+      }
+
     } else {
       Serial.print("Error on HTTP request: ");
       Serial.println(httpResponseCode);
@@ -53,34 +65,6 @@ void loop() {
     Serial.println("WiFi Disconnected");
   }
 
-  // إيقاف تشغيل الـ LED بعد 5 ثوانٍ
-  delay(5000);
-  digitalWrite(ledPin, LOW);
-
-  // إرسال بيانات إيقاف تشغيل الـ LED
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    
-    String url = "http://api.thingspeak.com/update?api_key=" + apiKey + "&field1=0"; // 0 لإيقاف تشغيل الـ LED
-    
-    http.begin(url);
-    int httpResponseCode = http.GET();
-
-    if (httpResponseCode > 0) {
-      String response = http.getString();
-      Serial.println(httpResponseCode);
-      Serial.println(response);
-    } else {
-      Serial.print("Error on HTTP request: ");
-      Serial.println(httpResponseCode);
-    }
-    
-    http.end();
-  } else {
-    Serial.println("WiFi Disconnected");
-  }
-
-  // الانتظار لمدة 60 ثانية قبل التكرار
-  delay(60000);
+  // الانتظار لمدة 10 ثوانٍ قبل التكرار
+  delay(10000); // الانتظار بين الاستعلامات (10 ثوانٍ)
 }
-
