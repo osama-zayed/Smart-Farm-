@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحكم في LED</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>تحكم في LED عبر ThingSpeak</h1>
+    <button onclick="turnOnLED()">تشغيل اللمبة</button>
+    <button onclick="turnOffLED()">إيقاف اللمبة</button>
+
+    <script>
+        const apiKey = "XBJ3H2MOY9WC3KZA"; // مفتاح API الخاص بك
+        const channelID = "2662884"; // قناة ThingSpeak
+
+        function turnOnLED() {
+            fetch(`http://api.thingspeak.com/update?api_key=${apiKey}&field1=1`)
+                .then(response => {
+                    if (response.ok) {
+                        alert('تم تشغيل اللمبة.');
+                    } else {
+                        alert('حدث خطأ أثناء تشغيل اللمبة.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function turnOffLED() {
+            fetch(`http://api.thingspeak.com/update?api_key=${apiKey}&field1=0`)
+                .then(response => {
+                    if (response.ok) {
+                        alert('تم إيقاف اللمبة.');
+                    } else {
+                        alert('حدث خطأ أثناء إيقاف اللمبة.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+</html>
