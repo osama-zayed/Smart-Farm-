@@ -1,7 +1,0 @@
-#line 1 "H:\\sketch_sep18a\\.vscode\\arduino.json"
-{
-    "board": "arduino:avr:uno",
-    "programmer": "avrisp",
-    "output": ".arduino/output",
-    "sketch": "led.ino"
-}

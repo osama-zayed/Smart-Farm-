@@ -4,11 +4,6 @@ const int waterSensorPin = A0; // رقم المنفذ المتصل بحساس ا
 const int pumpPin = 7; // رقم المنفذ المتصل بالترانزستور (أو الريليه)
 const int threshold = 300; // القيمة الدنيا لتحفيز المضخة (تحتاج لتعديل هذه القيمة حسب حساس الماء)
 
-#line 5 "H:\\sketch_sep18a\\sketch_sep18a.ino"
-void setup();
-#line 10 "H:\\sketch_sep18a\\sketch_sep18a.ino"
-void loop();
-#line 5 "H:\\sketch_sep18a\\sketch_sep18a.ino"
 void setup() {
   pinMode(pumpPin, OUTPUT); // تعيين المنفذ المتصل بالمضخة كمخرج
   Serial.begin(9600); // بدء الاتصال التسلسلي
@@ -33,20 +28,18 @@ void loop() {
 }
 
 #line 1 "H:\\sketch_sep18a\\led.ino"
-const int pumpPin = 7; // رقم المنفذ المتصل بالترانزستور (أو الريليه)
-
 void setup()
 {
-    pinMode(pumpPin, OUTPUT);
+    pinMode(7, OUTPUT);
 }
 
 void loop()
 {
 
-    digitalWrite(pumpPin, HIGH);
+    digitalWrite(7, HIGH);
     delay(1000);
 
-    digitalWrite(pumpPin, LOW);
+    digitalWrite(7, LOW);
 
     delay(1000);
 }

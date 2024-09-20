@@ -2,5 +2,6 @@
     "board": "arduino:avr:uno",
     "programmer": "avrisp",
     "output": ".arduino/output",
-    "sketch": "led.ino"
+    "sketch": "sketch_sep17a.ino",
+    "port": "COM3"
 }
