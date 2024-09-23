@@ -19,25 +19,47 @@
 </head>
 <body>
     <h1>تحكم في LED عبر ThingSpeak</h1>
-    <h2>LED 1</h2>
-    <button onclick="turnOnLED1()">تشغيل اللمبة 1</button>
-    <button onclick="turnOffLED1()">إيقاف اللمبة 1</button>
 
-    <h2>LED 2</h2>
-    <button onclick="turnOnLED2()">تشغيل اللمبة 2</button>
-    <button onclick="turnOffLED2()">إيقاف اللمبة 2</button>
+    <div id="led-controls"></div>
 
     <script>
         const apiKey = "XBJ3H2MOY9WC3KZA"; 
         const channelID = "2662884"; 
 
-        function turnOnLED1() {
-            fetch(`http://api.thingspeak.com/update?api_key=${apiKey}&field1=1`)
+        const ledCount = 3; // عدد اللمبات
+
+        // إنشاء عناصر التحكم لللمبات
+        function createLEDControls() {
+            const container = document.getElementById('led-controls');
+            for (let i = 1; i <= ledCount; i++) {
+                const ledDiv = document.createElement('div');
+                ledDiv.innerHTML = `
+                    <h2>LED ${i}</h2>
+                    <button onclick="toggleLED(${i}, true)">تشغيل اللمبة ${i}</button>
+                    <button onclick="toggleLED(${i}, false)">إيقاف اللمبة ${i}</button>
+                `;
+                container.appendChild(ledDiv);
+            }
+            for (let i = 7; i <= 8; i++) {
+                const ledDiv = document.createElement('div');
+                ledDiv.innerHTML = `
+                    <h2>LED ${i}</h2>
+                    <button onclick="toggleLED(${i}, true)">تشغيل اللمبة ${i}</button>
+                    <button onclick="toggleLED(${i}, false)">إيقاف اللمبة ${i}</button>
+                `;
+                container.appendChild(ledDiv);
+            }
+        }
+
+        // دالة لتشغيل وإيقاف اللمبات
+        function toggleLED(ledNumber, state) {
+            const fieldValue = state ? 1 : 0;
+            fetch(`http://api.thingspeak.com/update?api_key=${apiKey}&field${ledNumber}=${fieldValue}`)
                 .then(response => {
                     if (response.ok) {
-                        alert('تم تشغيل اللمبة 1.');
+                        alert(`تم ${state ? 'تشغيل' : 'إيقاف'} اللمبة ${ledNumber}.`);
                     } else {
-                        alert('حدث خطأ أثناء تشغيل اللمبة 1.');
+                        alert(`حدث خطأ أثناء ${state ? 'تشغيل' : 'إيقاف'} اللمبة ${ledNumber}.`);
                     }
                 })
                 .catch(error => {
@@ -45,47 +67,7 @@
                 });
         }
 
-        function turnOffLED1() {
-            fetch(`http://api.thingspeak.com/update?api_key=${apiKey}&field1=0`)
-                .then(response => {
-                    if (response.ok) {
-                        alert('تم إيقاف اللمبة 1.');
-                    } else {
-                        alert('حدث خطأ أثناء إيقاف اللمبة 1.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        function turnOnLED2() {
-            fetch(`http://api.thingspeak.com/update?api_key=${apiKey}&field2=1`)
-                .then(response => {
-                    if (response.ok) {
-                        alert('تم تشغيل اللمبة 2.');
-                    } else {
-                        alert('حدث خطأ أثناء تشغيل اللمبة 2.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        function turnOffLED2() {
-            fetch(`http://api.thingspeak.com/update?api_key=${apiKey}&field2=0`)
-                .then(response => {
-                    if (response.ok) {
-                        alert('تم إيقاف اللمبة 2.');
-                    } else {
-                        alert('حدث خطأ أثناء إيقاف اللمبة 2.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
+        createLEDControls(); // إنشاء عناصر التحكم عند تحميل الصفحة
     </script>
 </body>
 </html>
