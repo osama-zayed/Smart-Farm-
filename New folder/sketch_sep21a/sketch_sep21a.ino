@@ -128,7 +128,7 @@ void controlLEDs(int soilHumidity1, int soilHumidity2, int waterLevel) {
         digitalWrite(ledPin1, (autoControlSoilState && (soilHumidity1 < 300)) ? HIGH : (state1 == 1 ? HIGH : LOW));
         Serial.println((state1 == 1) ? "LED 1 is ON" : "LED 1 is OFF");
     }
-
+ 
 
     int state2 = (led2 != -1) ? led2 : lastLedState2;
     if (state2 != lastLedState2) {
