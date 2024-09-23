@@ -151,4 +151,3 @@ void controlLEDs(int soilHumidity1, int soilHumidity2, int waterLevel) {
         Serial.println((state3 == 1) ? "LED 3 is ON" : "LED 3 is OFF");
     }
 }
-
