@@ -1,36 +1,31 @@
 #include <WiFi.h>
 #include <WebServer.h>
 
-const int ledPin1 = 23;        // دبوس اللمبة 1
-const int ledPin2 = 22;        // دبوس اللمبة 2
-const int ledPin3 = 21;        // دبوس اللمبة 3
-const int waterSensorPin = 34; // دبوس حساس الماء
-const int soilRHXPin1 = 35;    // دبوس حساس رطوبة التربة 1
-const int soilRHXPin2 = 32;    // دبوس حساس رطوبة التربة 2
+const int ledPin1 = 23;
+const int ledPin2 = 22;  
+const int ledPin3 = 21;    
+const int waterSensorPin = 34;
+const int soilRHXPin1 = 35; 
+const int soilRHXPin2 = 32; 
 
-// مصفوفات لتخزين آخر 10 قيم
 const int maxValues = 10;
 int soilHumidity1Values[maxValues] = {0};
 int soilHumidity2Values[maxValues] = {0};
 int waterLevelValues[maxValues] = {0};
 int sensorIndex = 0;
 
-// إعدادات شبكة الواي فاي
-const char *ssid = "osama";         // اسم الشبكة
-const char *password = "123123123"; // كلمة مرور الشبكة
+const char *ssid = "osama";
+const char *password = "123123123"; 
 
 WebServer server(80);
 
-// حالة التحكم التلقائي
 bool autoControlSoilState = false;
 bool autoControlWaterState = false;
 
-// حالة اللمبات
 bool led1State = false;
 bool led2State = false;
 bool led3State = false;
 
-// إعداد الواي فاي
 void setupWiFi() {
     WiFi.begin(ssid, password);
     Serial.print("Connecting to WiFi");
@@ -46,7 +41,6 @@ void setupWiFi() {
     Serial.println(myIP);
 }
 
-// إعداد السيرفر
 void setupServer() {
     server.on("/", HTTP_GET, []() {
         String html = "<h1>Control LEDs</h1>";
@@ -64,7 +58,6 @@ void setupServer() {
         server.send(200, "text/html", html);
     });
 
-    // إعداد نقاط التحكم التلقائي
     server.on("/autoControlSoil", HTTP_GET, []() {
         String state = server.arg("state");
         autoControlSoilState = (state == "1");
@@ -77,7 +70,6 @@ void setupServer() {
         server.send(200, "text/html", "<h1>Auto Control Water is " + String(autoControlWaterState ? "Enabled" : "Disabled") + "</h1><a href=\"/\">Back</a>");
     });
 
-    // إعداد نقاط التحكم في اللمبات
     server.on("/H1", HTTP_GET, []() {
         led1State = true; // تحديث الحالة
         digitalWrite(ledPin1, HIGH);
@@ -114,19 +106,16 @@ void setupServer() {
         server.send(200, "text/html", "<h1>LED 3 is OFF</h1><a href=\"/\">Back</a>");
     });
 
-    // إعداد نقطة نهاية لقراءة قيم الحساسات بتنسيق JSON
     server.on("/SensorValues", HTTP_GET, []() {
         // قراءة القيم
         int soilHumidity1 = analogRead(soilRHXPin1);
         int soilHumidity2 = analogRead(soilRHXPin2);
         int waterLevel = analogRead(waterSensorPin);
 
-        // تخزين القيم في المصفوفات
         soilHumidity1Values[sensorIndex] = soilHumidity1;
         soilHumidity2Values[sensorIndex] = soilHumidity2;
         waterLevelValues[sensorIndex] = waterLevel;
 
-        // تحديث الفهرس
         sensorIndex = (sensorIndex + 1) % maxValues;
 
         String sensorData = "{";
@@ -137,7 +126,6 @@ void setupServer() {
          sensorData += "\"autoControlWaterState\": " + String(autoControlWaterState) + ",";
         sensorData += "\"data\": [";
 
-        // إضافة بيانات الحساسات إلى المتغير sensorData
         for (int i = 0; i < maxValues; i++) {
             sensorData += "{";
             sensorData += "\"soilHumidity1\": " + String(soilHumidity1Values[i]) + ",";
@@ -158,7 +146,6 @@ void setupServer() {
     Serial.println("Server started");
 }
 
-// قراءة قيم الحساسات والتحكم في اللمبات
 void sendSensorValues() {
     int soilHumidity1 = analogRead(soilRHXPin1);
     int soilHumidity2 = analogRead(soilRHXPin2);
@@ -169,16 +156,15 @@ void sendSensorValues() {
     Serial.print("autoControlWaterState: ");
     Serial.println(autoControlWaterState);
 
-    // التحكم في اللمبات بناءً على الحساسات
     if (autoControlSoilState) {
-        led1State = (soilHumidity1 > 1200); // تحديث الحالة
+        led1State = (soilHumidity1 > 1500); 
         digitalWrite(ledPin1, led1State ? HIGH : LOW);
         
-        led2State = (soilHumidity2 > 1200); // تحديث الحالة
+        led2State = (soilHumidity2 > 1500);
         digitalWrite(ledPin2, led2State ? HIGH : LOW);
     }
     if (autoControlWaterState) {
-        led3State = (waterLevel < 100); // تحديث الحالة
+        led3State = (waterLevel < 100); 
         digitalWrite(ledPin3, led3State ? HIGH : LOW);
     }
 }
@@ -196,7 +182,7 @@ void setup() {
 }
 
 void loop() {
-    server.handleClient(); // التعامل مع الطلبات الواردة
-    sendSensorValues();    // إرسال قيم الحساسات والتحكم في اللمبات
+    server.handleClient(); 
+    sendSensorValues();   
     delay(100);
 }
