@@ -71,43 +71,42 @@ void setupServer() {
     });
 
     server.on("/H1", HTTP_GET, []() {
-        led1State = true; // تحديث الحالة
+        led1State = true;
         digitalWrite(ledPin1, HIGH);
         server.send(200, "text/html", "<h1>LED 1 is ON</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/L1", HTTP_GET, []() {
-        led1State = false; // تحديث الحالة
+        led1State = false; 
         digitalWrite(ledPin1, LOW);
         server.send(200, "text/html", "<h1>LED 1 is OFF</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/H2", HTTP_GET, []() {
-        led2State = true; // تحديث الحالة
+        led2State = true; 
         digitalWrite(ledPin2, HIGH);
         server.send(200, "text/html", "<h1>LED 2 is ON</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/L2", HTTP_GET, []() {
-        led2State = false; // تحديث الحالة
+        led2State = false; 
         digitalWrite(ledPin2, LOW);
         server.send(200, "text/html", "<h1>LED 2 is OFF</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/H3", HTTP_GET, []() {
-        led3State = true; // تحديث الحالة
+        led3State = true; 
         digitalWrite(ledPin3, HIGH);
         server.send(200, "text/html", "<h1>LED 3 is ON</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/L3", HTTP_GET, []() {
-        led3State = false; // تحديث الحالة
+        led3State = false; 
         digitalWrite(ledPin3, LOW);
         server.send(200, "text/html", "<h1>LED 3 is OFF</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/SensorValues", HTTP_GET, []() {
-        // قراءة القيم
         int soilHumidity1 = analogRead(soilRHXPin1);
         int soilHumidity2 = analogRead(soilRHXPin2);
         int waterLevel = analogRead(waterSensorPin);
