@@ -1,11 +1,10 @@
 const int potPin = A3; 
-const int ledPin = 3; 
+const int ledPin = 3;
 
 void setup() {
     Serial.begin(9600); 
     pinMode(ledPin, OUTPUT);
 }
-
 
 void loop() {
     int sensorValue = analogRead(potPin); 

@@ -29,7 +29,7 @@ void loop() {
 
 #line 1 "D:\\الابتوب الثاني\\برمجة\\الجامعة\\level 4\\سنه رابعه الفصل الاول\\انظمة مدمجة\\sketch_sep18a\\aa.ino"
 const int potPin = A3; 
-const int ledPin = 3; 
+const int ledPin = 3;
 
 void setup() {
     Serial.begin(9600); 
