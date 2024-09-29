@@ -2,6 +2,6 @@
     "board": "arduino:avr:uno",
     "programmer": "avrisp",
     "output": ".arduino/output",
-    "sketch": "LED Blinking/2LED.ino/7 Segment .ino",
+    "sketch": "aa.ino",
     "port": "COM3"
 }

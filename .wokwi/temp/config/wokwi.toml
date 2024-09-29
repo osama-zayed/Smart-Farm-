@@ -1,4 +1,4 @@
 [wokwi]
 version = 1
-firmware = "C:/Users/ALMASDAR/AppData/Local/Programs/Microsoft VS Code/.arduino/output/aa.ino.hex"
-elf = "C:/Users/ALMASDAR/AppData/Local/Programs/Microsoft VS Code/.arduino/output/aa.ino.elf"
+firmware = "../../../.arduino/output/aa.ino.hex"
+elf = "../../../.arduino/output/aa.ino.elf"
