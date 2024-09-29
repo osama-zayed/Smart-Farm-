@@ -1,14 +1,10 @@
+#line 1 "D:\\الابتوب الثاني\\برمجة\\الجامعة\\level 4\\سنه رابعه الفصل الاول\\انظمة مدمجة\\sketch_sep18a\\.arduino\\output\\sketch\\sketch_sep18a.ino.cpp"
 #include <Arduino.h>
 #line 1 "D:\\الابتوب الثاني\\برمجة\\الجامعة\\level 4\\سنه رابعه الفصل الاول\\انظمة مدمجة\\sketch_sep18a\\sketch_sep18a.ino"
 const int waterSensorPin = A0; // رقم المنفذ المتصل بحساس الماء
 const int pumpPin = 7; // رقم المنفذ المتصل بالترانزستور (أو الريليه)
 const int threshold = 300; // القيمة الدنيا لتحفيز المضخة (تحتاج لتعديل هذه القيمة حسب حساس الماء)
 
-#line 5 "D:\\الابتوب الثاني\\برمجة\\الجامعة\\level 4\\سنه رابعه الفصل الاول\\انظمة مدمجة\\sketch_sep18a\\sketch_sep18a.ino"
-void setup();
-#line 10 "D:\\الابتوب الثاني\\برمجة\\الجامعة\\level 4\\سنه رابعه الفصل الاول\\انظمة مدمجة\\sketch_sep18a\\sketch_sep18a.ino"
-void loop();
-#line 5 "D:\\الابتوب الثاني\\برمجة\\الجامعة\\level 4\\سنه رابعه الفصل الاول\\انظمة مدمجة\\sketch_sep18a\\sketch_sep18a.ino"
 void setup() {
   pinMode(pumpPin, OUTPUT); // تعيين المنفذ المتصل بالمضخة كمخرج
   Serial.begin(9600); // بدء الاتصال التسلسلي
