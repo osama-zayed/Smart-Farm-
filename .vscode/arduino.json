@@ -2,6 +2,6 @@
     "board": "arduino:avr:uno",
     "programmer": "avrisp",
     "output": ".arduino/output",
-    "sketch": "aa.ino",
+    "sketch": "WiFiAccessPoint/ESP32/ESP32.ino",
     "port": "COM3"
 }
