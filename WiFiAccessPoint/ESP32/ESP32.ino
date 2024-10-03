@@ -1,9 +1,9 @@
 #include <WiFi.h>
 #include <WebServer.h>
 
-const int pump1 = 23;
-const int pump2 = 22;  
-const int pump3 = 21;    
+const int ledPin1 = 23;
+const int ledPin2 = 22;  
+const int ledPin3 = 21;    
 const int waterSensorPin = 34;
 const int soilRHXPin1 = 35; 
 const int soilRHXPin2 = 32; 
@@ -22,9 +22,9 @@ WebServer server(80);
 bool autoControlSoilState = false;
 bool autoControlWaterState = false;
 
-bool pump1State = false;
-bool pump2State = false;
-bool pump3State = false;
+bool led1State = false;
+bool led2State = false;
+bool led3State = false;
 
 void setupWiFi() {
     WiFi.begin(ssid, password);
@@ -43,13 +43,13 @@ void setupWiFi() {
 
 void setupServer() {
     server.on("/", HTTP_GET, []() {
-        String html = "<h1>Control pumps</h1>";
-        html += "<p>Click <a href=\"/H1\">Turn ON pump 1</a></p>";
-        html += "<p>Click <a href=\"/L1\">Turn OFF pump 1</a></p>";
-        html += "<p>Click <a href=\"/H2\">Turn ON pump 2</a></p>";
-        html += "<p>Click <a href=\"/L2\">Turn OFF pump 2</a></p>";
-        html += "<p>Click <a href=\"/H3\">Turn ON pump 3</a></p>";
-        html += "<p>Click <a href=\"/L3\">Turn OFF pump 3</a></p>";
+        String html = "<h1>Control LEDs</h1>";
+        html += "<p>Click <a href=\"/H1\">Turn ON LED 1</a></p>";
+        html += "<p>Click <a href=\"/L1\">Turn OFF LED 1</a></p>";
+        html += "<p>Click <a href=\"/H2\">Turn ON LED 2</a></p>";
+        html += "<p>Click <a href=\"/L2\">Turn OFF LED 2</a></p>";
+        html += "<p>Click <a href=\"/H3\">Turn ON LED 3</a></p>";
+        html += "<p>Click <a href=\"/L3\">Turn OFF LED 3</a></p>";
         html += "<p><a href=\"/autoControlSoil?state=1\">Enable Auto Control Soil</a></p>";
         html += "<p><a href=\"/autoControlSoil?state=0\">Disable Auto Control Soil</a></p>";
         html += "<p><a href=\"/autoControlWater?state=1\">Enable Auto Control Water</a></p>";
@@ -61,49 +61,49 @@ void setupServer() {
     server.on("/autoControlSoil", HTTP_GET, []() {
         String state = server.arg("state");
         autoControlSoilState = (state == "1");
-        server.send(200, "text/html", "<h1>Auto Control Soil is " + String(autoControlSoilState ? "Enabpump" : "Disabpump") + "</h1><a href=\"/\">Back</a>");
+        server.send(200, "text/html", "<h1>Auto Control Soil is " + String(autoControlSoilState ? "Enabled" : "Disabled") + "</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/autoControlWater", HTTP_GET, []() {
         String state = server.arg("state");
         autoControlWaterState = (state == "1");
-        server.send(200, "text/html", "<h1>Auto Control Water is " + String(autoControlWaterState ? "Enabpump" : "Disabpump") + "</h1><a href=\"/\">Back</a>");
+        server.send(200, "text/html", "<h1>Auto Control Water is " + String(autoControlWaterState ? "Enabled" : "Disabled") + "</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/H1", HTTP_GET, []() {
-        pump1State = true;
-        digitalWrite(pump1, HIGH);
-        server.send(200, "text/html", "<h1>pump 1 is ON</h1><a href=\"/\">Back</a>");
+        led1State = true;
+        digitalWrite(ledPin1, HIGH);
+        server.send(200, "text/html", "<h1>LED 1 is ON</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/L1", HTTP_GET, []() {
-        pump1State = false; 
-        digitalWrite(pump1, LOW);
-        server.send(200, "text/html", "<h1>pump 1 is OFF</h1><a href=\"/\">Back</a>");
+        led1State = false; 
+        digitalWrite(ledPin1, LOW);
+        server.send(200, "text/html", "<h1>LED 1 is OFF</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/H2", HTTP_GET, []() {
-        pump2State = true; 
-        digitalWrite(pump2, HIGH);
-        server.send(200, "text/html", "<h1>pump 2 is ON</h1><a href=\"/\">Back</a>");
+        led2State = true; 
+        digitalWrite(ledPin2, HIGH);
+        server.send(200, "text/html", "<h1>LED 2 is ON</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/L2", HTTP_GET, []() {
-        pump2State = false; 
-        digitalWrite(pump2, LOW);
-        server.send(200, "text/html", "<h1>pump 2 is OFF</h1><a href=\"/\">Back</a>");
+        led2State = false; 
+        digitalWrite(ledPin2, LOW);
+        server.send(200, "text/html", "<h1>LED 2 is OFF</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/H3", HTTP_GET, []() {
-        pump3State = true; 
-        digitalWrite(pump3, HIGH);
-        server.send(200, "text/html", "<h1>pump 3 is ON</h1><a href=\"/\">Back</a>");
+        led3State = true; 
+        digitalWrite(ledPin3, HIGH);
+        server.send(200, "text/html", "<h1>LED 3 is ON</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/L3", HTTP_GET, []() {
-        pump3State = false; 
-        digitalWrite(pump3, LOW);
-        server.send(200, "text/html", "<h1>pump 3 is OFF</h1><a href=\"/\">Back</a>");
+        led3State = false; 
+        digitalWrite(ledPin3, LOW);
+        server.send(200, "text/html", "<h1>LED 3 is OFF</h1><a href=\"/\">Back</a>");
     });
 
     server.on("/SensorValues", HTTP_GET, []() {
@@ -118,9 +118,9 @@ void setupServer() {
         sensorIndex = (sensorIndex + 1) % maxValues;
 
         String sensorData = "{";
-        sensorData += "\"pump1\": " + String(pump1State) + ",";
-        sensorData += "\"pump2\": " + String(pump2State) + ",";
-        sensorData += "\"pump3\": " + String(pump3State) + ",";
+        sensorData += "\"pump1\": " + String(led1State) + ",";
+        sensorData += "\"pump2\": " + String(led2State) + ",";
+        sensorData += "\"pump3\": " + String(led3State) + ",";
          sensorData += "\"autoControlSoilState\": " + String(autoControlSoilState) + ",";
          sensorData += "\"autoControlWaterState\": " + String(autoControlWaterState) + ",";
         sensorData += "\"data\": [";
@@ -156,23 +156,23 @@ void sendSensorValues() {
     Serial.println(autoControlWaterState);
 
     if (autoControlSoilState) {
-        pump1State = (soilHumidity1 > 1500); 
-        digitalWrite(pump1, pump1State ? HIGH : LOW);
+        led1State = (soilHumidity1 > 1500); 
+        digitalWrite(ledPin1, led1State ? HIGH : LOW);
         
-        pump2State = (soilHumidity2 > 1500);
-        digitalWrite(pump2, pump2State ? HIGH : LOW);
+        led2State = (soilHumidity2 > 1500);
+        digitalWrite(ledPin2, led2State ? HIGH : LOW);
     }
     if (autoControlWaterState) {
-        pump3State = (waterLevel < 100); 
-        digitalWrite(pump3, pump3State ? HIGH : LOW);
+        led3State = (waterLevel < 100); 
+        digitalWrite(ledPin3, led3State ? HIGH : LOW);
     }
 }
 
 void setup() {
     Serial.begin(115200);
-    pinMode(pump1, OUTPUT);
-    pinMode(pump2, OUTPUT);
-    pinMode(pump3, OUTPUT);
+    pinMode(ledPin1, OUTPUT);
+    pinMode(ledPin2, OUTPUT);
+    pinMode(ledPin3, OUTPUT);
     pinMode(waterSensorPin, INPUT);
     pinMode(soilRHXPin1, INPUT);
     pinMode(soilRHXPin2, INPUT);
